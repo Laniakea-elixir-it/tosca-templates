@@ -31,7 +31,7 @@ topology_template:
     storage_size:
       type: string
       description: storage memory required for the instance
-      default: 100 GB
+      default: 50 GB
     hybrid:
       type: boolean
       description: Flag to specify that this cluster will work in an hybrid environment
@@ -66,11 +66,11 @@ topology_template:
     version:
       type: string
       description: galaxy version to install
-      default: release_17.09
+      default: release_17.05
     instance_description:
       type: string
       description: galaxy instance description
-      default: ELIXIR-IT SLURM (elastic)
+      default: 'ELIXIR-IT SLURM (elastic)'
     instance_key_pub:
       type: string
       description: galaxy instance ssh public key
@@ -92,7 +92,7 @@ topology_template:
     refdata_dir:
       type: string
       description: path to store galaxy reference data
-      default: /refdata
+      default: /cvmfs
     refdata_repository_name:
       type: string
       description: Onedata space name, CernVM-FS repository name or subdirectory downaload name
@@ -100,7 +100,7 @@ topology_template:
     refdata_provider_type:
       type: string
       description: Select Reference data provider type (Onedata, CernVM-FS or download)
-      default: 'cvmfs'
+      default: 'cvmfs_preconfigured'
     refdata_provider:
       type: string
       description: Oneprovider for reference data
@@ -216,8 +216,9 @@ topology_template:
             instance_type: { get_input: fe_instance_flavor }
         os:
           properties:
-            image: centos-7-1708-galaxy-base
-            #image: ubuntu-16.04-vmi
+            image: centos-7-galaxy-base
+            #image: centos-7_2nic
+            #image: ubuntu-16.04_2nic
       requirements:
         # contextually this can only be a relationship type
         - local_storage:
@@ -248,6 +249,7 @@ topology_template:
             min_instances: { get_input: wn_num_min }
       requirements:
         - host: lrms_wn
+        - dependency: galaxy_portal # this is needed to correctly share /export after its configuration on WNs if wn_num_min>0
 
     galaxy_wn:
       type: tosca.nodes.indigo.GalaxyWnCvmfsReferenceData
@@ -257,6 +259,7 @@ topology_template:
         flavor: { get_input: flavor }
         version: { get_input: version }
         reference_data: { get_input: reference_data }
+        refdata_provider_type: { get_input: refdata_provider_type }
         refdata_cvmfs_server_url: { get_input: refdata_cvmfs_server_url }
         refdata_cvmfs_repository_name: { get_input: refdata_cvmfs_repository_name }
         refdata_cvmfs_key_file: { get_input: refdata_cvmfs_key_file }
@@ -265,6 +268,7 @@ topology_template:
         refdata_dir: { get_input: refdata_dir }
       requirements:
         - host: lrms_wn
+        - dependency: wn_node # this is needed to correctly share /export after its configuration on WNs if wn_num_min>0
 
     lrms_wn:
       type: tosca.nodes.indigo.Compute
@@ -272,13 +276,17 @@ topology_template:
         scalable:
           properties:
             count: { get_input: wn_num_min }
+        endpoint:
+          properties:
+            network_name: private_net #we specify ReCaS private network name here. This append the right interface. Portability is broken
         host:
           properties:
             instance_type: { get_input: wn_instance_flavor }
         os:
           properties:
-            image: centos-7-1708-galaxy-base
-            #image: ubuntu-16.04-vmi
+            image: centos-7-galaxy-base
+            #image: centos-7_2nic
+            #image: ubuntu-16.04_2nic
 
   outputs:
     galaxy_url:
