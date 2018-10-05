@@ -18,16 +18,16 @@ topology_template:
     wn_num_min:
       type: integer
       description: Minimum number of WNs in the elastic cluster
-      default: 0
+      default: 1
       required: yes
     fe_instance_flavor:
       type: string
       description: front end flavor (num_cpu, memory, disk)
-      default: small
+      default: medium
     wn_instance_flavor:
       type: string
       description: worker nodes flavor (num_cpu, memory, disk)
-      default: small
+      default: medium
     storage_size:
       type: string
       description: storage memory required for the instance
@@ -74,7 +74,7 @@ topology_template:
     instance_key_pub:
       type: string
       description: galaxy instance ssh public key
-      default: your_ssh_public_key
+      default: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440'
     export_dir:
       type: string
       description: path to store galaxy data
@@ -249,7 +249,11 @@ topology_template:
             min_instances: { get_input: wn_num_min }
       requirements:
         - host: lrms_wn
-        - dependency: galaxy_portal # this is needed to correctly share /export after its configuration on WNs if wn_num_min>0
+        # This component install slurm.
+        # Galaxy send jobs to slurm as {{ galaxy }} user.
+        # So the user has to be created before the slurm installation.
+        # Galaxy user creation is done in galaxy_wn.
+        - dependency: galaxy_wn
 
     galaxy_wn:
       type: tosca.nodes.indigo.GalaxyWnCvmfsReferenceData
@@ -268,7 +272,10 @@ topology_template:
         refdata_dir: { get_input: refdata_dir }
       requirements:
         - host: lrms_wn
-        - dependency: wn_node # this is needed to correctly share /export after its configuration on WNs if wn_num_min>0
+        # The worker node has to be configured after the galaxy_portal component
+        # since the {{ export_dir }} and the external volume is created there.
+        # This is mandatory for wn_num_min > 0, while can be ignored for pure elastic clusters.
+        - dependency: galaxy_portal
 
     lrms_wn:
       type: tosca.nodes.indigo.Compute
@@ -278,7 +285,10 @@ topology_template:
             count: { get_input: wn_num_min }
         endpoint:
           properties:
-            network_name: private_net #we specify ReCaS private network name here. This append the right interface. Portability is broken
+            # Needed on ReCaS Cloud.
+            # The name of the private network is hard-coded here to append the right interface.
+            # This configuration broke the portability.
+            network_name: private_net
         host:
           properties:
             instance_type: { get_input: wn_instance_flavor }
