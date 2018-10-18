@@ -80,7 +80,7 @@ topology_template:
     refdata_dir:
       type: string
       description: path to store galaxy reference data
-      default: /refdata
+      default: /cvmfs
     refdata_repository_name:
       type: string
       description: Onedata space name, CernVM-FS repository name or subdirectory downaload name
@@ -88,7 +88,7 @@ topology_template:
     refdata_provider_type:
       type: string
       description: Select Reference data provider type (Onedata, CernVM-FS or download)
-      default: 'cvmfs'
+      default: 'cvmfs_preconfigured'
     refdata_provider:
       type: string
       description: Oneprovider for reference data
@@ -168,6 +168,7 @@ topology_template:
         endpoint:
           properties:
             network_name: PUBLIC
+            private_ip: false
             ports:
               http_port:
                 protocol: tcp
@@ -175,6 +176,9 @@ topology_template:
               ftp_port:
                 protocol: tcp
                 source: 21
+              ftp_passive:
+                protocol: tcp
+                source_range: [ 30000, 30009 ]
         # Host container properties
         host:
          properties:
@@ -183,7 +187,7 @@ topology_template:
         # Guest Operating System properties
         os:
           properties:
-            image: { concat: ['centos-7-1708-', get_input: flavor ] } # centos-7-1708-galaxy-no-tools
+            image: { concat: ['centos-7-', get_input: flavor,'-', get_input: version ] } # centos-7-galaxy-no-tools-release_17.05
       requirements:
         # contextually this can only be a relationship type
         - local_storage:
