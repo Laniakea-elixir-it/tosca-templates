@@ -10,6 +10,9 @@ description: >
   Configure, click on the "Submit" button, wait for the confirmation e-mail(s) and log in to your new Galaxy instance.
   If after some hours you do not receive any e-mail please be sure to check your SPAM BOX.
 
+metadata:
+  display_name: Galaxy Cluster
+
 topology_template:
   inputs:
     users:
@@ -200,6 +203,14 @@ topology_template:
       requirements:
         - host: galaxy_server
         - dependency: condor_cm_config
+
+    laniakea_utils:
+      type: tosca.nodes.Laniakea.Utils
+      properties:
+        storage_encryption: { get_input: storage_encryption }
+      requirements:
+        - host: galaxy_server
+        - dependency: galaxy
 
     galaxy_server:
       type: tosca.nodes.indigo.Compute
