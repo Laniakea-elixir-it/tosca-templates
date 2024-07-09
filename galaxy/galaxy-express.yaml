@@ -2,7 +2,8 @@ tosca_definitions_version: tosca_simple_yaml_1_0
 
 imports:
   #- indigo_custom_types: https://raw.githubusercontent.com/mtangaro/tosca-types/laniakea-galaxy/custom_types.yaml
-  - indigo_custom_types: https://baltig.infn.it/mtangaro/tosca-types/-/raw/vault_secrets_dev/tosca_types/applications/laniakea_types.yaml
+  #- indigo_custom_types: https://baltig.infn.it/mtangaro/tosca-types/-/raw/vault_secrets_dev/tosca_types/applications/laniakea_types.yaml
+  - indigo_custom_types: https://baltig.infn.it/mtangaro/tosca-types/-/raw/htcondor_laniakea/tosca_types/applications/laniakea_types.yaml
 
 description: >
   Deploy Galaxy on a single Virtual Machine from a VM image (FAST).
@@ -141,6 +142,14 @@ topology_template:
         - host: galaxy_server
         - dependency: luks_encryption
 
+    laniakea_utils:
+      type: tosca.nodes.Laniakea.Utils
+      properties:
+        storage_encryption: { get_input: storage_encryption }
+      requirements:
+        - host: galaxy_server
+        - dependency: galaxy
+
     galaxy_server:
       type: tosca.nodes.indigo.Compute
       properties:
@@ -157,9 +166,11 @@ topology_template:
               luksctl_port:
                 protocol: tcp
                 source: 5000
+                remote_cidr: "212.189.202.181/32"
               laniakea_utils_port:
                 protocol: tcp
                 source: 5001
+                remote_cidr: "212.189.202.181/32"
         # Host container properties
         host:
          properties:
