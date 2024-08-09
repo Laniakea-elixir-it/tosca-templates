@@ -7,7 +7,7 @@ imports:
 
 description: >
   Deploy Galaxy on a single Virtual Machine from a VM image (FAST).
-  The basic configuration includes CentOS 7, the selected Galaxy flavour, companion software and reference data.
+  The basic configuration includes RockyLinux 9, the selected Galaxy flavour, companion software and reference data.
   Configure, click on the "Submit" button, wait for the confirmation e-mail(s) and log in to your new Galaxy instance.
   If after some hours you do not receive any e-mail please be sure to check your SPAM BOX.
 
@@ -21,10 +21,14 @@ topology_template:
       default: []
       required: false
 
-    instance_flavor:
-      type: string
-      description: instance flavor (num_cpu, memory, disk)
-      default: small
+    num_cpus:
+      type: integer
+      description: Number of virtual cpus for the VM
+      default: 1
+    mem_size:
+      type: scalar-unit.size
+      description: Amount of memory for the VM
+      default: 2 GB
     storage_size:
       type: string
       description: storage memory required for the instance
@@ -171,19 +175,15 @@ topology_template:
                 protocol: tcp
                 source: 5001
                 remote_cidr: "212.189.202.181/32"
-        # Host container properties
         host:
          properties:
-           instance_type: { get_input: instance_flavor }
-        # Guest Operating System properties
+           num_cpus: { get_input: num_cpus }
+           mem_size: { get_input: mem_size }
         os:
           properties:
             image: { get_input: version }
-            #version: v1.0.0
       requirements:
-        # contextually this can only be a relationship type
         - local_storage:
-            # capability is provided by Compute Node Type
             node: my_block_storage
             capability: tosca.capabilities.Attachment
             relationship:
