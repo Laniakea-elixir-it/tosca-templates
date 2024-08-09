@@ -16,4 +16,6 @@ TOSCA template for Laniakea
 
 ## Deploy a VM
 
-## Others
+## Utils
+
+`irida.yml`: Deploy IRIDA lims (Unmaintained)
