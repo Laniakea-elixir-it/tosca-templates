@@ -90,18 +90,18 @@ topology_template:
 
   node_templates:
 
-    galaxy:
-      type: tosca.nodes.indigo.GalaxyPortal
-      properties:
-        admin_email: { get_input: admin_email }
-        admin_api_key: { get_input: admin_api_key }
-        version: { get_input: version }
-        instance_description: { get_input: instance_description }
-        export_dir: { get_input: export_dir }
-        enable_interactive_tools: { get_input: enable_interactive_tools }
-        flavor: { get_input: flavor }
-      requirements:
-        - host: galaxy_server
+    #galaxy:
+    #  type: tosca.nodes.indigo.GalaxyPortal
+    #  properties:
+    #    admin_email: { get_input: admin_email }
+    #    admin_api_key: { get_input: admin_api_key }
+    #    version: { get_input: version }
+    #    instance_description: { get_input: instance_description }
+    #    export_dir: { get_input: export_dir }
+    #    enable_interactive_tools: { get_input: enable_interactive_tools }
+    #    flavor: { get_input: flavor }
+    #  requirements:
+    #    - host: galaxy_server
 
     galaxy_server:
       type: tosca.nodes.indigo.Compute
