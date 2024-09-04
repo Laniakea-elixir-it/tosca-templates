@@ -117,7 +117,7 @@ topology_template:
                 protocol: tcp
                 source: 80
         host:
-         properties:
+          properties:
             num_cpus: { get_input: num_cpus }
             mem_size: { get_input: mem_size }
         os:
