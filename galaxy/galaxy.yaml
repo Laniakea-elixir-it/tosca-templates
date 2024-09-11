@@ -80,7 +80,7 @@ topology_template:
     enable_interactive_tools:
       type: boolean
       description: Enable Galaxy Interactive Tools (install docker)
-      default: true
+      default: false
       required: false
 
     flavor:
