@@ -15,6 +15,10 @@ TOSCA template for Laniakea
 
 ## Jupyter
 
+| Template | Description | Continuous testing |
+| -------- | ----------- | ------------------ |
+| `jupyterhub.yml` | Perform the deployment of a JupyterHub server starting from a clean Ubuntu 22.04 (Live Build). | yes |
+
 ## Deploy a VM
 
 ## Utils
