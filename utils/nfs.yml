@@ -59,9 +59,9 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rockylinux-9
-            #distribution: centos
-            #version: 7
+            #image: rockylinux-9
+            distribution: rockylinux
+            version: 9.3
       requirements:
         # contextually this can only be a relationship type
         - local_storage:
@@ -113,9 +113,9 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rockylinux-9
-            #distribution: centos
-            #version: 7
+            #image: "RockyLinux 9.3 20231113"
+            distribution: rockylinux
+            version: 9.3
   
   outputs:
     node_ip:
