@@ -59,7 +59,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rocklinux-9.3-laniakea-dev-v0.0.1
+            image: rocklinux-9
             #distribution: centos
             #version: 7
       requirements:
@@ -113,7 +113,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rocklinux-9.3-laniakea-dev-v0.0.1 
+            image: rocklinux-9
             #distribution: centos
             #version: 7
   
