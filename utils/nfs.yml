@@ -59,9 +59,9 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: ubuntu-22.04
-            #distribution: rockylinux
-            #version: 9.3
+            #image: ubuntu-22.04
+            distribution: ubuntu
+            version: 22.04
       requirements:
         # contextually this can only be a relationship type
         - local_storage:
@@ -113,9 +113,9 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: ubuntu-22.04
-            #distribution: rockylinux
-            #version: 9.3
+            #image: ubuntu-22.04
+            distribution: ubuntu
+            version: 22.04
   
   outputs:
     node_ip:
