@@ -59,7 +59,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rocky-9.1-mtangaro
+            image: ubuntu-22.04
             #distribution: rockylinux
             #version: 9.3
       requirements:
@@ -113,7 +113,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: rocky-9.1-mtangaro
+            image: ubuntu-22.04
             #distribution: rockylinux
             #version: 9.3
   
