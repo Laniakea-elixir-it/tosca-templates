@@ -23,6 +23,7 @@ TOSCA template for Laniakea
 
 ## Utils
 
-`nfs.yml`: deploy a cluster of VMs, with nfs share.
-
-`irida.yml`: Deploy IRIDA lims (Unmaintained)
+| Template | Description | Continuous testing |
+| -------- | ----------- | ------------------ |
+| `nfs.yml` | Deploy a cluster of VMs, with nfs share. | yes |
+| `irida.yml` | Deploy IRIDA lims | no (Unmaintained) |
