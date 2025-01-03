@@ -59,7 +59,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: RockyLinux_9.5_20241118
+            image: rockylinux.9.5-laniakea-dev_v1.0.0
             #distribution: ubuntu
             #version: 22.04
       requirements:
@@ -113,7 +113,7 @@ topology_template:
             mem_size: 8 GB
         os:
           properties:
-            image: RockyLinux_9.5_20241118
+            image: rockylinux.9.5-laniakea-dev_v1.0.0
             #distribution: ubuntu
             #version: 22.04
   
