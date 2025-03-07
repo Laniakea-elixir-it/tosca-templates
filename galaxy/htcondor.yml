@@ -28,6 +28,11 @@ topology_template:
       type: string
       description: instance flavor (num_cpu, memory, disk)
       default: small
+    htcondor_password:
+      type: string
+      description: HTCondor password. Must be the same for CM, nodes and submit.
+      default: "changeit"
+      required: true
 
     storage_size:
       type: scalar-unit.size
@@ -61,12 +66,18 @@ topology_template:
       type: tosca.nodes.indigo.LRMS.FrontEnd.Condor
       properties:
         htcondor_server: { get_attribute: [ galaxy_server, private_address, 0 ] }
-        condor_ip_range: { get_attribute: [ galaxy_server, private_address, 0 ] }
-        condor_daemons:
+        htcondor_ip_range: { get_attribute: [ galaxy_server, private_address, 0 ] }
+        htcondor_version: 24.x
+        htcondor_domain: laniakea
+        htcondor_password: { get_input: htcondor_password }
+        htcondor_daemons:
          - COLLECTOR
          - MASTER
          - NEGOTIATOR
          - SCHEDD
+        bootstrap_user: #[{"os_user_name": "galaxy", "os_user_guid": "5001"}]
+          - os_user_name: galaxy
+            os_user_guid: 5001
       requirements:
         - host: galaxy_server
         - dependency: nfs_server_config
@@ -97,7 +108,7 @@ topology_template:
             mem_size: 8 GB #{ get_input: fe_mem }
         os:
           properties:
-            image: rockylinux-9-laniakea-dev
+            image: rockylinux.9.5-laniakea-dev_v1.0.0
             #distribution: centos
             #version: 7
       requirements:
@@ -147,10 +158,16 @@ topology_template:
       type: tosca.nodes.indigo.LRMS.WorkerNode.Condor
       properties:
         htcondor_server: { get_attribute: [ galaxy_server, private_address, 0 ] }
-        condor_daemons:
+        htcondor_version: 24.x
+        htcondor_domain: laniakea
+        htcondor_password: { get_input: htcondor_password }
+        htcondor_daemons:
          - MASTER
          - SCHEDD
          - STARTD
+        bootstrap_user: #[{"os_user_name": "galaxy", "os_user_guid": "5001"}]
+          - os_user_name: galaxy
+            os_user_guid: 5001 
       requirements:
         - host: htcondor_exec_server
         - dependency: nfs_client_config
@@ -170,7 +187,7 @@ topology_template:
               #mem_size: { get_input: wn_mem }
         os:
           properties:
-            image: rockylinux-9-laniakea-dev
+            image: rockylinux.9.5-laniakea-dev_v1.0.0
             #distribution: centos
             #version: 7
 
