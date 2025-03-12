@@ -167,7 +167,7 @@ topology_template:
       properties:
         htcondor_server: { get_attribute: [ galaxy_server, private_address, 0 ] }
         htcondor_ip_range: { get_attribute: [ galaxy_server, private_address, 0 ] }
-        htcondor_version: 10.x
+        htcondor_version: 24.x
         htcondor_domain: laniakea
         htcondor_password: { get_input: htcondor_password }
         htcondor_daemons:
@@ -294,7 +294,7 @@ topology_template:
       type: tosca.nodes.indigo.LRMS.WorkerNode.Condor
       properties:
         htcondor_server: { get_attribute: [ galaxy_server, private_address, 0 ] }
-        htcondor_version: 10.x
+        htcondor_version: 24.x
         htcondor_domain: laniakea
         htcondor_password: { get_input: htcondor_password }
         htcondor_daemons:
@@ -323,7 +323,7 @@ topology_template:
             mem_size: { get_input: exec_mem }
         os:
           properties:
-            image: rockylinux-9-laniakea-dev
+            image: rockylinux.9.5-laniakea-dev_v1.0.0
             #distribution: centos
             #version: 7
 
