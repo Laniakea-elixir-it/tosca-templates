@@ -6,9 +6,9 @@ TOSCA template for Laniakea
 
 | Template | Description | Continuous testing |
 | -------- | ----------- | ------------------ |
-| `galaxy.yml` | Perform the deployment of a Galaxy starting from a clean Virtual Machine (Live Build). Only the Galaxy production environment is installed. | yes |
-| `laniakea-galaxy-express.yml` | Perform the deployment of a Galaxy starting from a cloud image with Galaxy and all its companion software already installed (Express Build). The template integrate also the possibilty to encrypt the persistent volume, save user credentials on Vault, and the installation of Laniakea Utils API. | yes |
-
+| `galaxy.yaml` | Perform the deployment of a Galaxy starting from a clean Virtual Machine (Live Build). Only the Galaxy production environment is installed. | yes |
+| `laniakea-galaxy-express.yaml` | Perform the deployment of a Galaxy starting from a cloud image with Galaxy and all its companion software already installed (Express Build). The template integrate also the possibilty to encrypt the persistent volume, save user credentials on Vault, and the installation of Laniakea Utils API. | yes |
+| `laniakea-galaxy-express-htcondor.yaml` | Perform the deployment of a Galaxy starting from a cloud image with Galaxy and all its companion software already installed (Express Build), offloading jobs on a HTCondor Cluster by default. The template integrate also the possibilty to encrypt the persistent volume, save user credentials on Vault, and the installation of Laniakea Utils API. | yes |
 
 
 ## RStudio
