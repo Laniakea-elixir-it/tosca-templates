@@ -195,7 +195,7 @@ topology_template:
             admin_password: { get_input: admin_password }
           action: "read"
         version: { get_input: version }
-        galaxy_runner: condor
+        galaxy_runner: tpv_dispatcher
         instance_description: { get_input: instance_description }
         export_dir: { get_input: export_dir }
         enable_interactive_tools: { get_input: enable_interactive_tools }
