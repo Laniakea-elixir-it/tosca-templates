@@ -54,11 +54,11 @@ topology_template:
       default: /data
 
     #RStudio config
-    username:
+    rstudio_username:
       type: string
       description: rstudio username
       default: studio
-    user_password:
+    rstudio_password:
       type: string
       description: rstudio user password
       default: changeit
@@ -91,15 +91,15 @@ topology_template:
     rstudio:
       type: tosca.nodes.indigo.RStudioPortal.Vault
       properties:
-        username: { get_input: username }
-          #user_password: { get_input: user_password }
+        rstudio_username: { get_input: rstudio_username }
+          #rstudio_password: { get_input: rstudio_password }
         install_Seu: { get_input: install_Seu }
         retrieve_passphrase_from_vault: { get_input: retrieve_passphrase_from_vault }
         vault_token: { get_input: vault_token }
         vault_secrets:
           path: { get_input: vault_secrets_path }
           data:
-            user_password: { get_input: user_password }
+            rstudio_password: { get_input: rstudio_password }
           action: "read"
       requirements:
         - host: rstudio_server
