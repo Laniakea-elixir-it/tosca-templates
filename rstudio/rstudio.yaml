@@ -31,17 +31,17 @@ topology_template:
 
     os_distribution:
       type: string
-      default: ubuntu
+      default: rockylinux
       description: Operating System distro
       constraints:
          - valid_values: [ "ubuntu", "rockylinux" ]
 
     os_version:
       type: version
-      default: 22.04
+      default: 9.5
       description: Operating System distribution version
       constraints:
-         - valid_values: [ 22.04, 9.3 ]
+         - valid_values: [ 22.04, 9.5 ]
 
     storage_size:
       type: string
