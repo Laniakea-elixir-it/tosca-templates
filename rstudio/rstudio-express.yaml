@@ -1,7 +1,8 @@
 tosca_definitions_version: tosca_simple_yaml_1_0
 
 imports:
-  - indigo_custom_types: https://raw.githubusercontent.com/mtangaro/tosca-types/laniakea-galaxy/custom_types.yaml
+  #- indigo_custom_types: https://raw.githubusercontent.com/mtangaro/tosca-types/laniakea-galaxy/custom_types.yaml
+  - indigo_custom_types: https://baltig.infn.it/mtangaro/tosca-types/-/raw/htcondor_laniakea/tosca_types/applications/laniakea_types.yaml
 
 description: >
   Deploy RStudio on a single Virtual Machine (Express).
@@ -18,11 +19,14 @@ topology_template:
       default: []
       required: false
 
-    instance_flavor:
-      type: string
-      description: instance flavor (num_cpu, memory, disk)
-      default: large
-
+    num_cpus:
+      type: integer
+      description: Number of virtual cpus for the VM
+      default: 1
+    mem_size:
+      type: scalar-unit.size
+      description: Amount of memory for the VM
+      default: 2 GB
     storage_size:
       type: string
       description: storage memory required for the instance
@@ -34,25 +38,31 @@ topology_template:
       default: /data
 
     #RStudio config
+    rstudio_username:
+      type: string
+      description: rstudio username
+      default: studio
+    rstudio_password:
+      type: string
+      description: rstudio user password
+      default: changeit
     flavor:
       type: string
       description: name of the RStudio flavor
       required: true
       default: rstudio-minimal
 
-    ## Vault section for admin_password
-    admin_password:
-      type: string
-      description: password of the admin user
-      default: rstudio_admin_password
+    ## Vault section for user_password
     retrieve_passphrase_from_vault:
       type: boolean
       description: Enable Vault Password workflow
       default: false
       required: false
     vault_token:
-      type: tosca.datatypes.indigo.VaultToken
+      type: map
       description: Hashicorp endpoint description
+      entry_schema:
+        type: tosca.datatypes.indigo.VaultToken
       default: {}
       required: false
     vault_secrets_path:
@@ -60,33 +70,21 @@ topology_template:
       description: Secret path
       default: "sub/dep.uuid/user_secrets"
       required: false
-    vault_secrets_action:
-      type: string
-      description: Write or read secret
-      default: read
-      required: false
-      constraints:
-        - valid_values: ['read','write']
 
   node_templates:
 
     rstudio:
       type: tosca.nodes.indigo.RStudioPortalExpress
       properties:
+        rstudio_username: { get_input: rstudio_username }
+        flavor: { get_input: flavor }
         retrieve_passphrase_from_vault: { get_input: retrieve_passphrase_from_vault }
         vault_token: { get_input: vault_token }
         vault_secrets:
           path: { get_input: vault_secrets_path }
           data:
-            admin_password: { get_input: admin_password }
-          action: { get_input: vault_secrets_action }
-        flavor: { get_input: flavor }
-      requirements:
-        - lrms: local_lrms
-
-    # type to describe a Galaxy not using any LRMS but using the local system
-    local_lrms:
-      type: tosca.nodes.indigo.LRMS.FrontEnd.Local
+            rstudio_password: { get_input: rstudio_password }
+          action: "read"
       requirements:
         - host: rstudio_server
  
@@ -106,12 +104,12 @@ topology_template:
         # Host container properties
         host:
          properties:
-           instance_type: { get_input: instance_flavor }
+           #instance_type: { get_input: instance_flavor }
+           num_cpus: { get_input: num_cpus }
+           mem_size: { get_input: mem_size }
         # Guest Operating System properties
         os:
           properties:
-            #image: ubuntu-16.04
-            #image: centos-7-2003
             image: { get_input: flavor }
             #distribution: { get_input: os_distribution }
             #version: { get_input: os_version }
