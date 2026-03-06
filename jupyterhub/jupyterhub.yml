@@ -65,14 +65,39 @@ topology_template:
       default: changeit
       required: false
 
+    ## Vault section for user_password
+    retrieve_passphrase_from_vault:
+      type: boolean
+      description: Enable Vault Password workflow
+      default: false
+      required: false
+    vault_token:
+      type: map
+      description: Hashicorp endpoint description
+      entry_schema:
+        type: tosca.datatypes.indigo.VaultToken
+      default: {}
+      required: false
+    vault_secrets_path:
+      type: string
+      description: Secret path
+      default: "sub/dep.uuid/user_secrets"
+      required: false
+
   node_templates:
 
     jupyterhub:
-      type: tosca.nodes.indigo.JupyterHubPortal
+      type: tosca.nodes.indigo.JupyterHubPortal.Vault
       properties:
         jupyterhub_username: { get_input: jupyterhub_username }
-        jupyterhub_password: { get_input: jupyterhub_password }
         export_dir: { get_input: export_dir }
+        retrieve_passphrase_from_vault: { get_input: retrieve_passphrase_from_vault }
+        vault_token: { get_input: vault_token }
+        vault_secrets:
+          path: { get_input: vault_secrets_path }
+          data:
+            user_password: { get_input: jupyterhub_password }
+          action: "read"
       requirements:
         - host: jupyterhub_server
 
@@ -95,8 +120,9 @@ topology_template:
             mem_size: { get_input: mem_size }
         os:
           properties:
-            distribution: { get_input: os_distribution }
-            version: { get_input: os_version }
+            image: "Ubuntu 22.04"
+            #distribution: { get_input: os_distribution }
+            #version: { get_input: os_version }
       requirements:
         - local_storage:
             node: my_block_storage
