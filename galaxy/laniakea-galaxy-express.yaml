@@ -32,7 +32,7 @@ topology_template:
     storage_size:
       type: string
       description: storage memory required for the instance
-      default: 10 GB      
+      default: 10 GB
 
     # Storage encryption
     storage_encryption:
@@ -170,11 +170,11 @@ topology_template:
               luksctl_port:
                 protocol: tcp
                 source: 5000
-                remote_cidr: "212.189.202.181/32"
+                remote_cidr: "212.189.202.0/24"
               laniakea_utils_port:
                 protocol: tcp
                 source: 5001
-                remote_cidr: "212.189.202.181/32"
+                remote_cidr: "212.189.202.0/24"
         host:
          properties:
            num_cpus: { get_input: num_cpus }
