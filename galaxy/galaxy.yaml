@@ -6,7 +6,7 @@ imports:
 
 description: >
   Deploy Galaxy on a single Virtual Machine using Ansible roles.
-  The basic configuration includes RockyLinux 9, the selected Galaxy flavour, companion software and reference data.
+  The basic configuration includes RockyLinux, the selected Galaxy flavour, companion software and reference data.
   Configure, click on the "Submit" button, wait for the confirmation e-mail(s) and log in to your new Galaxy instance.
   If after some hours you do not receive any e-mail please be sure to check your SPAM BOX.
 
@@ -27,32 +27,28 @@ topology_template:
       type: integer
       description: Number of virtual cpus for the VM
       default: 1
-
     mem_size:
       type: scalar-unit.size
       description: Amount of memory for the VM
       default: 2 GB
-
+    storage_size:
+      type: string
+      description: storage memory required for the instance
+      default: 10 GB
     os_distribution:
       type: string
       default: rockylinux
       description: Operating System distro
       constraints:
-         - valid_values: [ "ubuntu", "rockylinux" ]
-
+        - valid_values: [ "ubuntu", "rockylinux" ]
     os_version:
       type: version
-      default: 9.3
+      default: 9.5
       description: Operating System distribution version
       constraints:
-         - valid_values: [ 22.04, 9.3 ]
+        - valid_values: [ 22.04, 9.5 ]
 
-    storage_size:
-      type: string
-      description: storage memory required for the instance
-      default: 10 GB
-
-    # Galaxy config
+    # Galaxy
     admin_email:
       type: string
       description: email of the admin user
@@ -72,7 +68,7 @@ topology_template:
     instance_description:
       type: string
       description: galaxy instance description
-      default: "INDIGO Galaxy test"
+      default: "ELIXIR-ITALY"
     export_dir:
       type: string
       description: path to store galaxy data
