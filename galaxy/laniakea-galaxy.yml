@@ -1,12 +1,11 @@
 tosca_definitions_version: tosca_simple_yaml_1_0
 
 imports:
-  - indigo_custom_types: https://raw.githubusercontent.com/mtangaro/tosca-types/laniakea-galaxy/custom_types.yaml
-
+  - indigo_custom_types: https://baltig.infn.it/mtangaro/tosca-types/-/raw/htcondor_laniakea/tosca_types/applications/laniakea_types.yaml
 
 description: >
   Deploy Galaxy on a single Virtual Machine using Ansible roles.
-  The basic configuration includes CentOS 7, the selected Galaxy flavour, companion software and reference data.
+  The basic configuration includes RockyLinux, the selected Galaxy flavour, companion software and reference data.
   Configure, click on the "Submit" button, wait for the confirmation e-mail(s) and log in to your new Galaxy instance.
   If after some hours you do not receive any e-mail please be sure to check your SPAM BOX.
 
