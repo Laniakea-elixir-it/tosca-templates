@@ -139,7 +139,7 @@ topology_template:
         - host: galaxy_server
 
     galaxy:
-      type: tosca.nodes.indigo.GalaxyPortal
+      type: tosca.nodes.indigo.GalaxyPortal.Vault
       properties:
         admin_email: { get_input: admin_email }
         admin_api_key: { get_input: admin_api_key }
