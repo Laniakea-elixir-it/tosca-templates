@@ -190,10 +190,10 @@ topology_template:
                 remote_cidr: "212.189.202.0/24"
         # Host container properties
         host:
-         properties:
-           #instance_type: { get_input: instance_flavor }
-           num_cpus: { get_input: num_cpus }
-           mem_size: { get_input: mem_size }
+          properties:
+            #instance_type: { get_input: instance_flavor }
+            num_cpus: { get_input: num_cpus }
+            mem_size: { get_input: mem_size }
         # Guest Operating System properties
         os:
           properties:
