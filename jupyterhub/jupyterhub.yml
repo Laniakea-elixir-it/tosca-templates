@@ -120,7 +120,7 @@ topology_template:
             mem_size: { get_input: mem_size }
         os:
           properties:
-            image: "ubuntu-22.04_20260320_laniakea"
+            image: "ubuntu-22.04_20260320-laniakea-dev_v1.0.0"
             #distribution: { get_input: os_distribution }
             #version: { get_input: os_version }
       requirements:
