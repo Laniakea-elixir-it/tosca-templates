@@ -4,7 +4,7 @@ imports:
   - indigo_custom_types: https://baltig.infn.it/infn-cloud/tosca-types/-/raw/master/tosca_types/base/basic_types.yaml
 
 description: >
-  Launch a compute node getting the IP and SSH credentials to access via ssh
+  Launch a compute node and get the IP and SSH credentials to access via ssh
 metadata:
   display_name: Virtual machine
 
@@ -16,7 +16,6 @@ topology_template:
       type: integer
       description: Number of virtual cpus for the VM
       default: 1
-
     mem_size:
       type: scalar-unit.size
       description: Amount of memory for the VM
@@ -28,13 +27,18 @@ topology_template:
       description: Operating System distro
       constraints:
          - valid_values: [ "ubuntu", "rockylinux" ]
-
     os_version:
       type: version
       default: 22.04
       description: Operating System distribution version
       constraints:
-         - valid_values: [ 22.04, 9.3 ]
+         - valid_values: [ 22.04, 9.5 ]
+
+    hostname:
+      description: Hostname
+      type: string
+      required: yes
+      default: vnode0
 
     users:
       type: list
@@ -43,7 +47,6 @@ topology_template:
         type: tosca.datatypes.indigo.User
       default: []
       required: false
-
 
   node_templates:
 
@@ -60,7 +63,6 @@ topology_template:
       requirements:
         - binding: server
         - link: priv_network
-
 
     server:
       type: tosca.nodes.indigo.Compute

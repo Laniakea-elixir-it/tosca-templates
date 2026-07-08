@@ -16,36 +16,33 @@ topology_template:
       type: integer
       description: Number of virtual cpus for the VM
       default: 1
-      constraints:
-      - valid_values: [ 1, 2, 4 ]
+      #constraints:
+      #- valid_values: [ 1, 2, 4 ]
     mem_size:
       type: scalar-unit.size
       description: Amount of memory for the VM
       default: 2 GB
-      constraints:
-      - valid_values: [ 2 GB, 4 GB ]
+      #constraints:
+      #- valid_values: [ 2 GB, 4 GB ]
 
     os_distribution:
       type: string
       default: ubuntu
-      description: Operating System distro - valid values ubuntu, centos
+      description: Operating System distro
       constraints:
          - valid_values: [ "ubuntu", "rockylinux" ]
-
     os_version:
       type: version
       default: 22.04
       description: Operating System distribution version
       constraints:
-         - valid_values: [ 22.04, 9.4 ]
+         - valid_values: [ 22.04, 9.5 ]
 
-    users:
-      type: list
-      description: list of users to create on the VM
-      entry_schema:
-        type: tosca.datatypes.indigo.User
-      default: []
-      required: false       
+    hostname:
+      description: Hostname
+      type: string
+      required: yes
+      default: vnode0
 
     ports:
       type: map
@@ -55,7 +52,7 @@ topology_template:
         - min_length: 0
       entry_schema:
         type: tosca.datatypes.indigo.network.PortSpec
-      description: Ports to open on the host
+      description: Ports to open on the virtual machine
 
     mountpoint:
       type: string
@@ -66,6 +63,14 @@ topology_template:
       type: scalar-unit.size
       description: Size of the volume to be attached
       default: 10 GB
+
+    users:
+      type: list
+      description: list of users to create on the VM
+      entry_schema:
+        type: tosca.datatypes.indigo.User
+      default: []
+      required: false
 
   node_templates:
 
@@ -95,7 +100,6 @@ topology_template:
         - binding: server
         - link: priv_network
 
-
     server:
       type: tosca.nodes.indigo.Compute
       properties:
@@ -103,6 +107,7 @@ topology_template:
       capabilities:
         endpoint:
           properties:
+            dns_name: { get_input: hostname }
             ports: { get_input: ports }
         scalable:
           properties:
@@ -136,4 +141,4 @@ topology_template:
     node_creds:
       value: { get_attribute: [ server, endpoint, credential, 0 ] }
     os_users:
-      value: { get_property: [ server, os_users, 0 ] }  
+      value: { get_property: [ server, os_users, 0 ] }
