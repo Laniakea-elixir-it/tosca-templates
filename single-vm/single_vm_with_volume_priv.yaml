@@ -40,6 +40,16 @@ topology_template:
       required: yes
       default: vnode0
 
+    ports:
+      type: map
+      required: false
+      default: { "ssh": { "protocol": "tcp", "source": 22 } }
+      constraints:
+        - min_length: 0
+      entry_schema:
+        type: tosca.datatypes.indigo.network.PortSpec
+      description: Ports to open on the virtual machine
+
     mountpoint:
       type: string
       default: /data
@@ -79,6 +89,10 @@ topology_template:
       properties:
         os_users: { get_input: users }
       capabilities:
+        endpoint:
+          properties:
+            dns_name: { get_input: hostname }
+            ports: { get_input: ports }
         scalable:
           properties:
             count: 1
